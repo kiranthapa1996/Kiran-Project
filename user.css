@@ -1,0 +1,35 @@
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+table,tr,th,td {
+  padding: 15px 45px;
+  font-size: 20px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td{
+  padding: 15px 15px;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  font-weight: 500;
+  color: blue;
+}
+
+button {
+  padding: 8px 24px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}

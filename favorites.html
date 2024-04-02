@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .favoriteItem {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .favoriteItem h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .favoriteItem p {
+      color: #666;
+    }
+
+    .favoriteItem button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .favoriteItem button:hover {
+      background-color: #0056b3;
+    }
+
+    .backButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .backButton:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="backButton" onclick="goBack()">Back</button>
+  <h1><u>Favorites</u></h1>
+  <div id="favoritesContainer" class="container"></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Fetch favorite items from the server
+      $.ajax({
+        url: 'getfavorites.php',
+        method: 'GET',
+        success: function (data) {
+          renderFavorites(data); // Call a function to render the favorite items
+        },
+        error: function (xhr, status, error) {
+          console.error('Error fetching favorite items:', error);
+        }
+      });
+    });
+
+    function renderFavorites(favorites) {
+      var favoritesContainer = $('#favoritesContainer');
+      favorites.forEach(function (item) {
+        var favoriteItemHtml = `
+                <div class="favoriteItem">
+                    <h3>${item.item_name}</h3>
+                    <p>Description: ${item.item_description}</p>
+                    <p>Price: Rs. ${item.item_price}</p>
+                    <button onclick="addToCart(${item.item_id})">Add to Cart</button>
+                    <button onclick="buyItem(${item.item_id})">Buy</button>
+                    <button class="deleteButton" onclick="deleteFavorite(${item.item_id})">Delete</button>
+                </div>
+            `;
+        favoritesContainer.append(favoriteItemHtml);
+      });
+    }
+
+    function addToCart(itemId) {
+      // Implement logic to add item to cart
+      console.log('Adding item ' + itemId + ' to cart...');
+    }
+
+    function buyItem(itemId) {
+      // Implement logic to buy item
+      console.log('Buying item ' + itemId);
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+
+    // Function to delete a favorite item
+    function deleteFavorite(itemId) {
+      // Send an AJAX request to deleteFavorite.php
+      $.ajax({
+        url: 'deletefavorite.php',
+        method: 'POST',
+        data: {
+          itemId: itemId
+        },
+        success: function (response) {
+          if (response.success) {
+            // Remove the favorite item from the client-side display
+            $('#favoriteItem_' + itemId).remove();
+          } else {
+            console.error('Error deleting favorite item:', response.message);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error deleting favorite item:', error);
+        }
+      });
+    }
+
+  </script>
+</body>
+
+</html>
